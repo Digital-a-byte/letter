@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>For Payari Pitu</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500;1,600&family=Quicksand:wght@400;500;600;700&display=swap');
+
+  :root{
+    --paper:#FDF6F0;
+    --paper-soft:#F7ECE3;
+    --green:#2F4F3C;
+    --green-soft:#4C6B55;
+    --pink:#E8889E;
+    --pink-soft:#F3B8C4;
+    --gold:#C9A15C;
+    --ink:#4A3B33;
+    --white:#FFFEFB;
+  }
+
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+
+  body{
+    background: radial-gradient(circle at 30% 0%, #FBEFE6 0%, var(--paper) 55%, #F3E4D8 100%);
+    font-family:'Quicksand', sans-serif;
+    color:var(--ink);
+    min-height:100vh;
+    overflow-x:hidden;
+    display:flex;
+    justify-content:center;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .stage{
+    width:100%;
+    max-width:480px;
+    min-height:100vh;
+    position:relative;
+    padding-bottom:60px;
+  }
+
+  /* ---------- floating tulip border garden ---------- */
+  .tulip-border{
+    position:fixed;
+    inset:0;
+    pointer-events:none;
+    z-index:0;
+    overflow:hidden;
+  }
+  .tulip-border svg{
+    position:absolute;
+    opacity:0.9;
+  }
+
+  /* ---------- music toggle ---------- */
+  .music-toggle{
+    position:fixed;
+    top:16px;
+    right:16px;
+    z-index:50;
+    width:46px;
+    height:46px;
+    border-radius:50%;
+    background:var(--white);
+    border:1.5px solid var(--gold);
+    box-shadow:0 4px 14px rgba(74,59,51,0.15);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    cursor:pointer;
+    transition:transform .25s ease;
+  }
+  .music-toggle:active{ transform:scale(0.9); }
+  .music-toggle svg{ width:22px; height:22px; }
+  .sound-bars rect{
+    transform-origin:bottom;
+    animation:bar 0.9s ease-in-out infinite;
+  }
+  .sound-bars rect:nth-child(2){ animation-delay:0.15s; }
+  .sound-bars rect:nth-child(3){ animation-delay:0.3s; }
+  @keyframes bar{
+    0%,100%{ transform:scaleY(0.4); }
+    50%{ transform:scaleY(1); }
+  }
+  .muted .sound-bars rect{ animation-play-state:paused; transform:scaleY(0.25); }
+
+  /* ---------- envelope / cover screen ---------- */
+  .cover{
+    position:fixed;
+    inset:0;
+    z-index:40;
+    background: linear-gradient(160deg, #F8E9DD 0%, #F1DCC9 100%);
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    padding:30px;
+    transition:opacity .8s ease, visibility .8s ease;
+  }
+  .cover.hide{
+    opacity:0;
+    visibility:hidden;
+    pointer-events:none;
+  }
+  .seal{
+    width:100px;
+    height:100px;
+    border-radius:50%;
+    background: radial-gradient(circle at 35% 30%, var(--pink-soft), var(--pink) 70%);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    box-shadow:0 8px 20px rgba(232,136,158,0.45), inset 0 -6px 10px rgba(0,0,0,0.08);
+    margin-bottom:26px;
+    cursor:pointer;
+    animation: breathe 3s ease-in-out infinite;
+  }
+  @keyframes breathe{
+    0%,100%{ transform:scale(1); }
+    50%{ transform:scale(1.06); }
+  }
+  .seal svg{ width:46px; height:46px; }
+  .cover h1{
+    font-family:'Playfair Display', serif;
+    font-style:italic;
+    font-weight:600;
+    font-size:1.7rem;
+    color:var(--green);
+    margin:0 0 8px;
+    line-height:1.3;
+  }
+  .cover p{
+    font-size:0.95rem;
+    color:var(--ink);
+    opacity:0.75;
+    margin:0 0 4px;
+    max-width:280px;
+  }
+  .cover .tap-hint{
+    margin-top:22px;
+    font-size:0.8rem;
+    letter-spacing:0.06em;
+    text-transform:uppercase;
+    color:var(--gold);
+    font-weight:600;
+  }
+  .cover-panda{
+    width:120px;
+    margin-top:18px;
+    animation: pandaSway 4s ease-in-out infinite;
+  }
+  @keyframes pandaSway{
+    0%,100%{ transform:rotate(-2deg) translateY(0); }
+    50%{ transform:rotate(2deg) translateY(-4px); }
+  }
+
+  /* ---------- content ---------- */
+  .content{
+    position:relative;
+    z-index:5;
+    padding:28px 22px 10px;
+  }
+
+  .header{
+    text-align:center;
+    margin-bottom:6px;
+  }
+  .header .eyebrow{
+    font-size:0.72rem;
+    letter-spacing:0.18em;
+    text-transform:uppercase;
+    color:var(--gold);
+    font-weight:700;
+    display:block;
+    margin-bottom:10px;
+  }
+  .header h1{
+    font-family:'Playfair Display', serif;
+    font-weight:700;
+    font-size:2.1rem;
+    color:var(--green);
+    margin:0 0 4px;
+    line-height:1.15;
+  }
+  .header h1 em{
+    font-style:italic;
+    color:var(--pink);
+  }
+  .header .for-name{
+    font-family:'Playfair Display', serif;
+    font-style:italic;
+    font-size:1.5rem;
+    color:var(--ink);
+    margin-top:6px;
+  }
+
+  .divider{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:10px;
+    margin:22px 0;
+    opacity:0;
+    animation: fadeUp 0.8s ease forwards;
+  }
+  .divider .line{
+    height:1px;
+    width:60px;
+    background:linear-gradient(90deg, transparent, var(--gold), transparent);
+  }
+  .divider svg{ width:18px; height:18px; }
+
+  .reveal{
+    opacity:0;
+    transform:translateY(18px);
+    transition:opacity .8s ease, transform .8s ease;
+  }
+  .reveal.in{
+    opacity:1;
+    transform:translateY(0);
+  }
+
+  /* letter card */
+  .letter{
+    background:var(--white);
+    border-radius:22px;
+    padding:26px 22px;
+    box-shadow:0 10px 30px rgba(74,59,51,0.12);
+    border:1px solid rgba(201,161,92,0.25);
+    margin-bottom:26px;
+    position:relative;
+  }
+  .letter::before{
+    content:'';
+    position:absolute;
+    top:14px; left:14px; right:14px; bottom:14px;
+    border:1px dashed rgba(201,161,92,0.35);
+    border-radius:14px;
+    pointer-events:none;
+  }
+  .letter h2{
+    font-family:'Playfair Display', serif;
+    font-style:italic;
+    font-weight:600;
+    color:var(--pink);
+    font-size:1.25rem;
+    margin:0 0 14px;
+    text-align:center;
+  }
+  .letter p{
+    font-size:0.97rem;
+    line-height:1.75;
+    margin:0 0 14px;
+    color:var(--ink);
+  }
+  .letter .signoff{
+    font-family:'Playfair Display', serif;
+    font-style:italic;
+    font-size:1.05rem;
+    text-align:right;
+    color:var(--green);
+    margin-top:18px;
+  }
+
+  /* quote cards */
+  .quote-section{ margin-bottom:30px; }
+  .section-label{
+    text-align:center;
+    font-family:'Playfair Display', serif;
+    font-style:italic;
+    color:var(--green-soft);
+    font-size:1.15rem;
+    margin-bottom:16px;
+  }
+  .quote-card{
+    background:var(--paper-soft);
+    border-left:4px solid var(--pink);
+    border-radius:14px;
+    padding:18px 18px 18px 20px;
+    margin-bottom:14px;
+    box-shadow:0 4px 14px rgba(74,59,51,0.06);
+  }
+  .quote-card.funny{
+    border-left-color:var(--gold);
+    background:#FBF3E6;
+  }
+  .quote-card p{
+    font-family:'Playfair Display', serif;
+    font-size:1.02rem;
+    line-height:1.6;
+    margin:0;
+    color:var(--ink);
+  }
+  .quote-card .mark{
+    font-size:1.6rem;
+    color:var(--pink);
+    font-family:'Playfair Display', serif;
+    line-height:0;
+    margin-right:2px;
+  }
+  .quote-card.funny .mark{ color:var(--gold); }
+
+  /* panda + tulip animation scene */
+  .scene{
+    position:relative;
+    height:190px;
+    margin-bottom:30px;
+    display:flex;
+    align-items:flex-end;
+    justify-content:center;
+  }
+  .scene-tulip{
+    position:absolute;
+    bottom:0;
+    width:46px;
+    animation: sway 3.5s ease-in-out infinite;
+  }
+  .scene-tulip.t1{ left:8%; animation-delay:0s; }
+  .scene-tulip.t2{ left:24%; width:36px; animation-delay:0.6s; }
+  .scene-tulip.t3{ right:24%; width:38px; animation-delay:1.1s; }
+  .scene-tulip.t4{ right:8%; width:48px; animation-delay:0.3s; }
+  @keyframes sway{
+    0%,100%{ transform:rotate(-4deg); }
+    50%{ transform:rotate(4deg); }
+  }
+  .scene-panda{
+    width:130px;
+    position:relative;
+    z-index:3;
+    animation: pandaBounce 2.6s ease-in-out infinite;
+  }
+  @keyframes pandaBounce{
+    0%,100%{ transform:translateY(0); }
+    50%{ transform:translateY(-8px); }
+  }
+
+  /* names ribbon */
+  .ribbon{
+    text-align:center;
+    margin-bottom:30px;
+  }
+  .ribbon-inner{
+    display:inline-flex;
+    align-items:center;
+    gap:12px;
+    background:var(--green);
+    color:var(--paper);
+    padding:14px 22px;
+    border-radius:50px;
+    box-shadow:0 8px 20px rgba(47,79,60,0.3);
+  }
+  .ribbon-inner .name{
+    font-family:'Playfair Display', serif;
+    font-style:italic;
+    font-weight:600;
+    font-size:1.05rem;
+  }
+  .ribbon-inner svg{ width:20px; height:20px; flex-shrink:0; }
+
+  /* footer */
+  .footer{
+    text-align:center;
+    padding:10px 10px 30px;
+  }
+  .footer .stamp{
+    font-family:'Playfair Display', serif;
+    font-style:italic;
+    color:var(--gold);
+    font-size:0.95rem;
+    margin-bottom:6px;
+  }
+  .footer .tiny{
+    font-size:0.75rem;
+    color:var(--ink);
+    opacity:0.5;
+  }
+
+  @keyframes fadeUp{
+    from{ opacity:0; transform:translateY(8px); }
+    to{ opacity:1; transform:translateY(0); }
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    *{ animation:none !important; transition:none !important; }
+  }
+</style>
+</head>
+<body>
+
+<div class="tulip-border" id="tulipBorder"></div>
+
+<button class="music-toggle muted" id="musicToggle" aria-label="Toggle background music">
+  <svg class="sound-bars" viewBox="0 0 24 24" fill="none">
+    <rect x="3" y="9" width="3" height="6" rx="1.2" fill="#C9A15C"/>
+    <rect x="10.5" y="5" width="3" height="14" rx="1.2" fill="#C9A15C"/>
+    <rect x="18" y="11" width="3" height="2" rx="1" fill="#C9A15C"/>
+  </svg>
+</button>
+
+<!-- cover / envelope -->
+<div class="cover" id="cover">
+  <div class="seal" id="sealBtn">
+    <svg viewBox="0 0 24 24" fill="none">
+      <path d="M12 21s-7.5-4.6-10-9.2C0.3 8.4 2 4.5 5.8 4c2.1-.3 4 .8 6.2 3.2C14.2 4.8 16.1 3.7 18.2 4c3.8.5 5.5 4.4 3.8 7.8C19.5 16.4 12 21 12 21z" fill="#fff" opacity="0.95"/>
+    </svg>
+  </div>
+  <h1>A little letter <br/>for my best friend</h1>
+  <p>Sealed with heart icon, guarded by a panda, written from the heart.</p>
+  <svg class="cover-panda" viewBox="0 0 200 180" fill="none">
+    <ellipse cx="100" cy="120" rx="62" ry="50" fill="#fff" stroke="#3a3a3a" stroke-width="3"/>
+    <circle cx="100" cy="62" r="46" fill="#fff" stroke="#3a3a3a" stroke-width="3"/>
+    <circle cx="58" cy="28" r="18" fill="#3a3a3a"/>
+    <circle cx="142" cy="28" r="18" fill="#3a3a3a"/>
+    <ellipse cx="76" cy="60" rx="15" ry="18" fill="#3a3a3a"/>
+    <ellipse cx="124" cy="60" rx="15" ry="18" fill="#3a3a3a"/>
+    <circle cx="78" cy="62" r="5" fill="#fff"/>
+    <circle cx="122" cy="62" r="5" fill="#fff"/>
+    <ellipse cx="100" cy="78" rx="9" ry="7" fill="#3a3a3a"/>
+    <path d="M92 84 Q100 90 108 84" stroke="#3a3a3a" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+    <ellipse cx="70" cy="118" rx="14" ry="20" fill="#3a3a3a"/>
+    <ellipse cx="130" cy="118" rx="14" ry="20" fill="#3a3a3a"/>
+    <ellipse cx="72" cy="158" rx="13" ry="9" fill="#3a3a3a"/>
+    <ellipse cx="128" cy="158" rx="13" ry="9" fill="#3a3a3a"/>
+  </svg>
+  <span class="tap-hint">Tap the Heart (above) to open</span>
+</div>
+
+<div class="stage">
+  <div class="content">
+
+    <div class="header reveal" id="r0">
+      <span class="eyebrow">Handwritten &amp; heartfelt</span>
+      <h1>True Friends, <br/><em>Forever Friends</em></h1>
+      <div class="for-name">for Payari Pitu 🌷</div>
+    </div>
+
+    <div class="divider">
+      <span class="line"></span>
+      <svg viewBox="0 0 24 24" fill="none"><path d="M12 21s-7.5-4.6-10-9.2C0.3 8.4 2 4.5 5.8 4c2.1-.3 4 .8 6.2 3.2C14.2 4.8 16.1 3.7 18.2 4c3.8.5 5.5 4.4 3.8 7.8C19.5 16.4 12 21 12 21z" fill="#E8889E"/></svg>
+      <span class="line"></span>
+    </div>
+
+    <!-- thank you letter -->
+    <div class="letter reveal" id="r1">
+      <h2>Payari Pitu,</h2>
+      <p>I don't say it enough, so let this be the time I finally do: thank you. Thank you for every texting  that turned a bad day into a funny story, for remembering things about me I forget myself, and for never once making me feel like too much.</p>
+      <p>You have this rare gift of making ordinary days feel like inside jokes only the two of us understand. I have laughed harder with you than I thought was medically possible, and shared everything  in front of you without ever feeling embarrassed about it. That's not small. That's everything.</p>
+      <p>So here's my thank you, written properly for once: thank you for staying, for showing up, for being exactly you. I got incredibly lucky the day I got you as my best friend.</p>
+      <div class="signoff">— always your bestfriend, no matter what</div>
+    </div>
+
+    <!-- panda + tulip animated scene -->
+    <div class="scene reveal" id="r2">
+      <svg class="scene-tulip t1" viewBox="0 0 60 100" fill="none">
+        <path d="M30 95V55" stroke="#4C6B55" stroke-width="4" stroke-linecap="round"/>
+        <path d="M30 95C20 80 22 65 30 55" stroke="#4C6B55" stroke-width="3" fill="none" stroke-linecap="round"/>
+        <path d="M16 40c0-14 8-24 14-30 6 6 14 16 14 30 0 9-6 16-14 16s-14-7-14-16z" fill="#E8889E"/>
+        <path d="M16 40c-2-10 2-20 8-26 0 12-2 20-8 26z" fill="#F3B8C4"/>
+        <path d="M44 40c2-10-2-20-8-26 0 12 2 20 8 26z" fill="#F3B8C4"/>
+      </svg>
+      <svg class="scene-tulip t2" viewBox="0 0 60 100" fill="none">
+        <path d="M30 95V55" stroke="#4C6B55" stroke-width="4" stroke-linecap="round"/>
+        <path d="M16 40c0-14 8-24 14-30 6 6 14 16 14 30 0 9-6 16-14 16s-14-7-14-16z" fill="#C9A15C"/>
+      </svg>
+      <svg class="scene-panda" viewBox="0 0 200 200" fill="none">
+        <ellipse cx="100" cy="135" rx="68" ry="55" fill="#fff" stroke="#3a3a3a" stroke-width="3"/>
+        <circle cx="100" cy="70" r="50" fill="#fff" stroke="#3a3a3a" stroke-width="3"/>
+        <circle cx="54" cy="32" r="20" fill="#3a3a3a"/>
+        <circle cx="146" cy="32" r="20" fill="#3a3a3a"/>
+        <ellipse cx="74" cy="68" rx="16" ry="19" fill="#3a3a3a"/>
+        <ellipse cx="126" cy="68" rx="16" ry="19" fill="#3a3a3a"/>
+        <circle cx="76" cy="70" r="5.5" fill="#fff"/>
+        <circle cx="124" cy="70" r="5.5" fill="#fff"/>
+        <circle cx="78" cy="71" r="2.6" fill="#000"/>
+        <circle cx="122" cy="71" r="2.6" fill="#000"/>
+        <ellipse cx="100" cy="86" rx="10" ry="8" fill="#3a3a3a"/>
+        <path d="M90 94 Q100 102 110 94" stroke="#3a3a3a" stroke-width="3" fill="none" stroke-linecap="round"/>
+        <ellipse cx="60" cy="158" rx="6" ry="16" fill="#3a3a3a" transform="rotate(-20 60 158)"/>
+        <ellipse cx="140" cy="158" rx="6" ry="16" fill="#3a3a3a" transform="rotate(20 140 158)"/>
+        <ellipse cx="74" cy="178" rx="15" ry="10" fill="#3a3a3a"/>
+        <ellipse cx="126" cy="178" rx="15" ry="10" fill="#3a3a3a"/>
+        <circle cx="70" cy="100" r="6" fill="#F3B8C4" opacity="0.7"/>
+        <circle cx="130" cy="100" r="6" fill="#F3B8C4" opacity="0.7"/>
+      </svg>
+      <svg class="scene-tulip t3" viewBox="0 0 60 100" fill="none">
+        <path d="M30 95V55" stroke="#4C6B55" stroke-width="4" stroke-linecap="round"/>
+        <path d="M16 40c0-14 8-24 14-30 6 6 14 16 14 30 0 9-6 16-14 16s-14-7-14-16z" fill="#E8889E"/>
+      </svg>
+      <svg class="scene-tulip t4" viewBox="0 0 60 100" fill="none">
+        <path d="M30 95V55" stroke="#4C6B55" stroke-width="4" stroke-linecap="round"/>
+        <path d="M16 40c0-14 8-24 14-30 6 6 14 16 14 30 0 9-6 16-14 16s-14-7-14-16z" fill="#F3B8C4"/>
+      </svg>
+    </div>
+
+    <!-- heartfelt quotes -->
+    <div class="quote-section reveal" id="r3">
+      <div class="section-label">from the heart</div>
+      <div class="quote-card">
+        <p><span class="mark">"</span>A best friend is the one who knows all your stories, and still stay the one without an ending.<span class="mark">"</span></p>
+      </div>
+      <div class="quote-card">
+        <p><span class="mark">"</span>Recently you boost my studing hours just through an idea, and thanks for stay connected🤝<span class="mark">"</span></p>
+      </div>
+      <div class="quote-card">
+        <p><span class="mark">"</span>True friendship isn't about being together every day; it's about never drifting apart.<span class="mark">"</span></p>
+      </div>
+    </div>
+
+    <!-- funny quotes -->
+    <div class="quote-section reveal" id="r4">
+      <div class="section-label">just for laughs</div>
+      <div class="quote-card funny">
+        <p><span class="mark">"</span>Best friends don't judge each other. They judge everyone else together.<span class="mark">"</span></p>
+      </div>
+      <div class="quote-card funny">
+        <p><span class="mark">"</span>Remember you have to give me chocolate 🍫😋😆<span class="mark">"</span></p>
+      </div>
+      <div class="quote-card funny">
+        <p><span class="mark">"</span>You're lucky to have a friend as awesome as me.😆😂😋<span class="mark">"</span></p>
+      </div>
+    </div>
+
+    <!-- name ribbon -->
+    <div class="ribbon reveal" id="r5">
+      <div class="ribbon-inner">
+        <svg viewBox="0 0 24 24" fill="none"><path d="M12 21s-7.5-4.6-10-9.2C0.3 8.4 2 4.5 5.8 4c2.1-.3 4 .8 6.2 3.2C14.2 4.8 16.1 3.7 18.2 4c3.8.5 5.5 4.4 3.8 7.8C19.5 16.4 12 21 12 21z" fill="#E8889E"/></svg>
+        <span class="name">Best Friends — Payari Pitu &amp; Me</span>
+        <svg viewBox="0 0 24 24" fill="none"><path d="M12 21s-7.5-4.6-10-9.2C0.3 8.4 2 4.5 5.8 4c2.1-.3 4 .8 6.2 3.2C14.2 4.8 16.1 3.7 18.2 4c3.8.5 5.5 4.4 3.8 7.8C19.5 16.4 12 21 12 21z" fill="#E8889E"/></svg>
+      </div>
+    </div>
+
+    <div class="footer reveal" id="r6">
+      <div class="stamp">I promise that i stay today and always untill you leave.</div>
+      <div class="tiny">tap the music note above for a soft tune 🎶</div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+  // ---------- reveal on scroll ----------
+  const reveals = document.querySelectorAll('.reveal');
+  const obs = new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{
+      if(e.isIntersecting){ e.target.classList.add('in'); }
+    });
+  }, { threshold:0.15 });
+  reveals.forEach(el=>obs.observe(el));
+
+  // ---------- cover open ----------
+  const cover = document.getElementById('cover');
+  const sealBtn = document.getElementById('sealBtn');
+  sealBtn.addEventListener('click', ()=>{
+    cover.classList.add('hide');
+    startMusic();
+    updateMusicIcon();
+  });
+
+  // ---------- floating tulip border (background ambience) ----------
+  const tulipBorder = document.getElementById('tulipBorder');
+  const tulipColors = ['#E8889E','#F3B8C4','#C9A15C'];
+  function makeTulip(i){
+    const size = 14 + Math.random()*14;
+    const left = Math.random()*100;
+    const delay = Math.random()*8;
+    const dur = 9 + Math.random()*6;
+    const color = tulipColors[i % tulipColors.length];
+    const div = document.createElement('div');
+    div.style.position='absolute';
+    div.style.left = left+'%';
+    div.style.top = '-40px';
+    div.style.width = size+'px';
+    div.style.opacity = '0.55';
+    div.innerHTML = `<svg viewBox="0 0 60 100" fill="none">
+      <path d="M30 95V55" stroke="#4C6B55" stroke-width="4" stroke-linecap="round"/>
+      <path d="M16 40c0-14 8-24 14-30 6 6 14 16 14 30 0 9-6 16-14 16s-14-7-14-16z" fill="${color}"/>
+    </svg>`;
+    div.style.animation = `fall ${dur}s linear ${delay}s infinite`;
+    tulipBorder.appendChild(div);
+  }
+  const styleTag = document.createElement('style');
+  styleTag.textContent = `@keyframes fall{ 0%{ transform:translateY(0) rotate(0deg);} 100%{ transform:translateY(110vh) rotate(40deg);} }`;
+  document.head.appendChild(styleTag);
+  for(let i=0;i<10;i++){ makeTulip(i); }
+
+  // ---------- ambient soft music (generated, no external file) ----------
+  let audioCtx, masterGain, isPlaying=false, noteTimer;
+  const musicToggle = document.getElementById('musicToggle');
+
+  function ensureAudio(){
+    if(!audioCtx){
+      audioCtx = new (window.AudioContext||window.webkitAudioContext)();
+      masterGain = audioCtx.createGain();
+      masterGain.gain.value = 0.0;
+      masterGain.connect(audioCtx.destination);
+    }
+  }
+
+  // gentle pentatonic music-box style loop
+  const scale = [523.25, 587.33, 659.25, 783.99, 880.00, 659.25, 587.33]; // C E F A B... pentatonic-ish
+  let noteIndex = 0;
+
+  function playNote(freq, time, duration){
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    osc.type = 'sine';
+    osc.frequency.value = freq;
+    gain.gain.setValueAtTime(0, time);
+    gain.gain.linearRampToValueAtTime(0.18, time + 0.05);
+    gain.gain.exponentialRampToValueAtTime(0.001, time + duration);
+    osc.connect(gain);
+    gain.connect(masterGain);
+    osc.start(time);
+    osc.stop(time + duration + 0.05);
+
+    // soft pad harmony underneath
+    const osc2 = audioCtx.createOscillator();
+    const gain2 = audioCtx.createGain();
+    osc2.type = 'sine';
+    osc2.frequency.value = freq/2;
+    gain2.gain.setValueAtTime(0, time);
+    gain2.gain.linearRampToValueAtTime(0.05, time + 0.1);
+    gain2.gain.exponentialRampToValueAtTime(0.001, time + duration*1.6);
+    osc2.connect(gain2);
+    gain2.connect(masterGain);
+    osc2.start(time);
+    osc2.stop(time + duration*1.6 + 0.05);
+  }
+
+  function scheduleLoop(){
+    if(!isPlaying) return;
+    const now = audioCtx.currentTime;
+    const freq = scale[noteIndex % scale.length];
+    playNote(freq, now, 1.4);
+    noteIndex++;
+    noteTimer = setTimeout(scheduleLoop, 900);
+  }
+
+  function startMusic(){
+    ensureAudio();
+    if(audioCtx.state === 'suspended'){ audioCtx.resume(); }
+    if(isPlaying) return;
+    isPlaying = true;
+    masterGain.gain.linearRampToValueAtTime(1, audioCtx.currentTime + 0.6);
+    scheduleLoop();
+  }
+
+  function stopMusic(){
+    if(!isPlaying) return;
+    isPlaying = false;
+    clearTimeout(noteTimer);
+    if(masterGain){
+      masterGain.gain.linearRampToValueAtTime(0, audioCtx.currentTime + 0.4);
+    }
+  }
+
+  function updateMusicIcon(){
+    musicToggle.classList.toggle('muted', !isPlaying);
+  }
+
+  musicToggle.addEventListener('click', ()=>{
+    ensureAudio();
+    if(audioCtx.state === 'suspended'){ audioCtx.resume(); }
+    if(isPlaying){ stopMusic(); } else { startMusic(); }
+    updateMusicIcon();
+  });
+</script>
+
+</body>
+</html>
